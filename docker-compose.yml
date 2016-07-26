@@ -1,0 +1,46 @@
+version: '2'
+services:
+    dog_web:
+        image: markchurch/web
+        command: python /code/app.py 
+        ports:
+            - "8000:5000"
+        environment:
+            ROLE: 'dog'
+            DB: 'dog_db'
+        networks:
+            - dog
+    dog_db:
+        image: redis
+        networks: 
+            - dog
+    cat_web:
+        image: markchurch/web
+        command: python /code/app.py 
+        ports:
+            - "8001:5000"
+        environment:
+            ROLE: 'cat'
+            DB: 'cat_db'
+        networks:
+            - cat
+    cat_db:
+        image: redis
+        networks: 
+            - cat
+    admin:
+        image: markchurch/admin
+        command: python /code/app.py 
+        networks:
+            - dog
+            - cat
+        ports:
+            - "8002:5000"
+        environment:
+            DB1: 'dog_db'
+            DB2: 'cat_db'
+        
+networks:
+    cat:
+    dog:
+
