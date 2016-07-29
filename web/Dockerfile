@@ -7,6 +7,8 @@ RUN sudo pip install flask==0.10.1 redis
 
 ADD / /code/
 
+WORKDIR /code
+
 EXPOSE 5000
 
-CMD ["python", "/code/app.py"]
+CMD ["python", "app.py"]
