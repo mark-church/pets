@@ -28,12 +28,19 @@ The `db` container has no required inputs. It may require a service name if a se
 ###Single Tenant Deployment
 In a single tenant deployment Pets deploys as a single `web` and a single `db` container. The `ROLE` can be either `cat` or `dog` depending on your preference and what kind of person you are. The Pets app will be externally reachable on port `8000`.
 
+####Local Deployment
+
 ```
 $ docker network create -d bridge petnet
 $ docker run -d --net petnet --name cat-db redis
 $ docker run -d --net petnet -p 8000:5000 -e 'DB=cat-db' -e 'ROLE=cat' markchurch/web 
 ```
-Alternatively you instantiate this service with Compose by running `docker-compose up -f single-tenant-compose.yml`
+####Swarm Deployment
+```
+$ docker network create -d overlay dognet
+$ docker service create --network dognet --name dog-db redis
+$ docker service create --network dognet -p 8000:5000 -e 'DB=dog-db' -e 'ROLE=dog' --name dog-web chrch/web
+```
 
 <br>
 <p align="center">
