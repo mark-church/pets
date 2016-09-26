@@ -1,13 +1,16 @@
 version: '2'
 services:
     web:
-        image: markchurch/web
+        image: chrch/web
         command: python app.py 
         ports:
             - "8000:5000"
         environment:
             ROLE: 'dog'
             DB: 'db'
+        labels:
+            interlock.hostname: "dog"
+            interlock.domain: "church.dckr.org"
         networks:
             - petnet
     db:

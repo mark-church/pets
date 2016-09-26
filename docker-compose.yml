@@ -1,46 +1,52 @@
 version: '2'
 services:
-    dog_web:
-        image: markchurch/web
-        command: python /code/app.py 
+    web-dog:
+        image: chrch/web
+        command: python app.py 
         ports:
             - "8000:5000"
         environment:
             ROLE: 'dog'
-            DB: 'dog_db'
+            DB: 'db-dog'
         networks:
-            - dog
-    dog_db:
+            - dognet
+        labels:
+            interlock.hostname: "animals"
+            interlock.domain: "dckr.org"
+    db-dog:
         image: redis
         networks: 
-            - dog
-    cat_web:
-        image: markchurch/web
-        command: python /code/app.py 
+            - dognet
+    web-cat:
+        image: chrch/web
+        command: python app.py 
         ports:
             - "8001:5000"
         environment:
             ROLE: 'cat'
-            DB: 'cat_db'
+            DB: 'db-cat'
         networks:
-            - cat
-    cat_db:
+            - catnet
+        labels:
+            interlock.hostname: "animals"
+            interlock.domain: "dckr.org"
+    db-cat:
         image: redis
         networks: 
-            - cat
+            - catnet
     admin:
-        image: markchurch/admin
+        image: chrch/admin
         command: python /code/app.py 
         networks:
-            - dog
-            - cat
+            - dognet
+            - catnet
         ports:
             - "8002:5000"
         environment:
-            DB1: 'dog_db'
-            DB2: 'cat_db'
-        
+            DB1: 'db-dog'
+            DB2: 'db-cat'
+       
 networks:
-    cat:
-    dog:
+    catnet:
+    dognet:
 

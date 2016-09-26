@@ -10,6 +10,9 @@ services:
             DB: 'db-dog'
         networks:
             - dognet
+        labels:
+            interlock.hostname: "animals"
+            interlock.domain: "dckr.org"
     db-dog:
         image: redis
         networks: 
@@ -24,6 +27,9 @@ services:
             DB: 'db-cat'
         networks:
             - catnet
+        labels:
+            interlock.hostname: "animals"
+            interlock.domain: "dckr.org"
     db-cat:
         image: redis
         networks: 
