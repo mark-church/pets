@@ -8,9 +8,6 @@ services:
         environment:
             ROLE: 'dog'
             DB: 'db'
-        labels:
-            interlock.hostname: "dog"
-            interlock.domain: "church.dckr.org"
         networks:
             - petnet
     db:
