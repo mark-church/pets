@@ -66,7 +66,7 @@ def index():
     return render_template('index.html', url=url, hostname=container_hostname, numhits=numhits, title=title)
 
 @app.route('/health')
-def index():
+def health():
     return 'OK'
 
 
