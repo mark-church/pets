@@ -32,14 +32,14 @@ In a single tenant deployment Pets deploys as a single `web` and a single `db` c
 
 ```
 $ docker network create -d bridge petnet
-$ docker run -d --net petnet --name cat-db redis
-$ docker run -d --net petnet -p 8000:5000 -e 'DB=cat-db' -e 'ROLE=cat' markchurch/web 
+$ docker run -d --net petnet --name db redis
+$ docker run -d --net petnet -p 8000:5000 -e 'DB=db' -e 'ROLE=cat' chrch/web 
 ```
 ####Swarm Deployment
 ```
-$ docker network create -d overlay dognet
-$ docker service create --network dognet --name dog-db redis
-$ docker service create --network dognet -p 8000:5000 -e 'DB=dog-db' -e 'ROLE=dog' --name dog-web chrch/web
+$ docker network create -d overlay petnet
+$ docker service create --network petnet --name db redis
+$ docker service create --network petnet -p 8000:5000 -e 'DB=db' -e 'ROLE=dog' --name web chrch/web
 ```
 
 <br>
