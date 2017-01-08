@@ -4,8 +4,9 @@ services:
         image: chrch/web
         command: python app.py 
         ports:
-            - "8000:5000"
+            - "8001:5000"
         environment:
+            ROLE: 'dog'
             DB: 'db'
         networks:
             - petnet
@@ -16,4 +17,3 @@ services:
         
 networks:
     petnet:
-

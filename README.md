@@ -39,8 +39,10 @@ $ docker run -d --net petnet -p 8000:5000 -e 'DB=db' -e 'ROLE=cat' chrch/web
 ```
 $ docker network create -d overlay petnet
 $ docker service create --network petnet --name db redis
-$ docker service create --network petnet -p 8000:5000 -e 'DB=db' -e 'ROLE=dog' --name web chrch/web
+$ docker service create --network petnet -p 8000:5000 -e 'DB=db' --name web chrch/web
 ```
+
+docker service create --restart-condition on-failure:3 --network petnet -p 8000:5000 -e 'DB=db' --name web chrch/web
 
 <br>
 <p align="center">

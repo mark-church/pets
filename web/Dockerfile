@@ -1,15 +1,15 @@
 
-FROM ubuntu:14.04
+FROM alpine
 
-RUN sudo apt-get update && apt-get -y install python-pip libpq-dev python-dev curl
+RUN apk update && apk add py-pip libpq python-dev curl
 
-RUN sudo pip install flask==0.10.1 redis
+RUN pip install flask==0.10.1 python-consul
 
-ADD / /code/
+ADD / /app
 
-WORKDIR /code
+WORKDIR /app
 
-HEALTHCHECK --interval=1m --timeout=10s CMD curl http://localhost:5000 || exit 1
+HEALTHCHECK --interval=20s --timeout=5s --retries=2 CMD curl --fail http://localhost:5000/health || exit 1
 
 EXPOSE 5000
 

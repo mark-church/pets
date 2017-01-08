@@ -1,34 +1,40 @@
 from flask import Flask, render_template, request
 from redis import Redis
 from redis.exceptions import ConnectionError
-import random, socket, time, json, os, sys
+import random, socket, time, json, os, sys, ast, consul
 
 db = os.getenv('DB')
 role = os.getenv('ROLE')
+
+if role is None:
+    role = 'dog'
+
+healthy = True
+version ='2.0'
+container_hostname = socket.gethostname()
 
 sys.stdout.write("Starting web container")
 
 app = Flask(__name__)
 
-if ':' in db:
-    (address, port) = db.split(':')
-else:
-    address = db
-    port = 6379
-    db = address + ':' + str(port)
+if db:
 
-while True:
-    try:
-        redis = Redis(host=address, port=port, db=0, socket_timeout=5)
-        redis.get(None)
-        break
-    except ConnectionError:
-        print "Attempting to connect to %s. Trying again in 3 seconds ..." % db
-        time.sleep(3)
+    if ':' in db:
+        (address, port) = db.split(':')
+    else:
+        address = db
+        port = 8500
+        db = address + ':' + str(port)
 
-container_hostname = socket.gethostname()
+
+    c = consul.Consul(host=address, port=port)
+    c.kv.put('hits', '0')
+
+if (os.path.isfile('/run/secrets/consul-ca.cert') & os.path.isfile('/run/secrets/consul.cert') & os.path.isfile('/run/secrets/consul.key')):
+    secured = True
 
 if role == 'cat':
+    URL = '/cats'
     title = "Cats"
     images = [
         "http://ak-hdl.buzzfed.com/static/2013-10/enhanced/webdr05/15/9/anigif_enhanced-buzz-26388-1381844103-11.gif",
@@ -45,6 +51,7 @@ if role == 'cat':
         "http://ak-hdl.buzzfed.com/static/2013-10/enhanced/webdr03/15/10/anigif_enhanced-buzz-11980-1381846269-1.gif"
         ]
 elif role == 'dog':
+        URL = '/dogs'
         title = "Dogs"
         images = [
         "https://img.buzzfeed.com/buzzfeed-static/static/2013-12/enhanced/webdr06/3/12/anigif_enhanced-buzz-12996-1386090648-41.gif",
@@ -56,26 +63,44 @@ else:
     sys.stdout.write("Error: no valid role")
     sys.exit(1)
 
-
-@app.route('/')
+@app.route(URL)
 def index():
-    url = random.choice(images)
-    hit = (str(request.environ['REMOTE_ADDR']),time.asctime())
-    redis.lpush(db,hit)
-    numhits = redis.llen(db)
-    return render_template('index.html', url=url, hostname=container_hostname, numhits=numhits, title=title)
+    if healthy:
+        url = random.choice(images)
+    else:
+        url = "../static/danger.png"
+    
+    if db:
+        x, hits = c.kv.get('hits')
+        newHits = int(hits["Value"]) + 1
+        c.kv.put('hits', str(newHits))
+        hit_string = str(newHits) + " hits for the " + title + "!"
+    if not db:
+        hit_string = ""
 
-@app.route('/health')
+    return render_template('index.html', url=url, hostname=container_hostname, hit_string=hit_string, title=title, version=version)
+
+@app.route('/health', methods=['GET', 'PUT'])
 def health():
-    return 'OK'
+    global healthy
+    if request.method == 'GET':
+        if healthy:
+            return 'OK', 200
+        else:
+            return 'NOT OK', 500
+    elif request.method == 'PUT':
+        if request.headers['Content-Type'] == 'application/json':
+            healthy = ast.literal_eval(str(request.json["healthy"]))
+            if healthy == True:
+                return "healthy"
+            if healthy == False:
+                return "not healthy"
+    else:
+        return 'ERROR REQUEST MTHD', 500
 
-
-@app.route('/hits')
-def hits():
-    for i in range(0,redis.llen(db)):
-        print redis.lindex(db,i)
-    return str(json.dumps(redis.llist(db)))
-
+#curl -X PUT -H 'Content-Type: application/json' -d '{"healthy": "False"}' http://localhost:8000/health
+#curl -X PUT -H 'Content-Type: application/json' -d '{"healthy": "True"}' http://localhost:8000/health
+#curl -v http://localhost:8000/health
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

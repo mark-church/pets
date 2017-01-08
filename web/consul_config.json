@@ -1,0 +1,8 @@
+{
+  "datacenter": "dc",
+  "data_dir": "/var/consul",
+  "log_level": "DEBUG",
+  "server" : true,
+  "bootstrap_expect" : 3,
+  "join" : "consul"
+}

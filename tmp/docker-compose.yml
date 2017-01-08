@@ -6,6 +6,7 @@ services:
         ports:
             - "8000:5000"
         environment:
+            ROLE: 'dog'
             DB: 'db'
         networks:
             - petnet
@@ -16,4 +17,3 @@ services:
         
 networks:
     petnet:
-

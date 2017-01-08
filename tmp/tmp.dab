@@ -1,0 +1,31 @@
+{
+  "Services": {
+    "db": {
+      "Image": "redis@sha256:0fe5a7afa2c2154f37c8ab56a9a6c5023cb0405cc0e85b34d8dcc1de6c3f143e", 
+      "Networks": [
+        "petnet"
+      ]
+    }, 
+    "web": {
+      "Args": [
+        "python", 
+        "app.py"
+      ], 
+      "Env": [
+        "DB=db", 
+        "ROLE=dog"
+      ], 
+      "Image": "chrch/web@sha256:5667840e8a9fe4aba42ac28102f630ea31941db41b4d92ae50871084bfaa0166", 
+      "Networks": [
+        "petnet"
+      ], 
+      "Ports": [
+        {
+          "Port": 5000, 
+          "Protocol": "tcp"
+        }
+      ]
+    }
+  }, 
+  "Version": "0.1"
+}
