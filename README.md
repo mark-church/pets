@@ -1,13 +1,27 @@
-#How to Demo Docker Datacenter (DDC) with Pets
+#The Pets Application
 Pets is a simple application that's useful for testing out features of Docker.
 
-Pets is comprised of two container types
+Pets is comprised of two images:
 
 - `web` is a front-end Python Flask container that serves up random images of housepets, depending on the given configuration
-- `db` is a back-end consul KV store that stores the number of visits that each `web` service recieves
+- `db` is a back-end consul KV store that stores the number of visits that each `web` service recieves. It's configured to bootstrap itself with 3 replicas so that we have fault tolerant persistence.
 
 
-###Running Pets
+###Running Pets on Swarm in Development
+Docker Swarm can easily be set up to run applications on a single developer laptop. The full app can be brought up to run in the same way it would run in production. We use a compose v3 file to deploy a fully fault tolerant frontend and backend, along with the configurations, secrets, and networks required for the application to run.
+
+This is the full architecture that is deployed when using [pets-dev-compose.yml]().
+
+```
+$ docker stack deploy -c pets-dev-compose.yml pets
+Creating network pets_backend
+Creating service pets_db
+Creating service pets_web
+```
+
+![](images/pets-dev-arch.png) 
+
+
 ####web
 The `web` container has several required inputs.
 
