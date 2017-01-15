@@ -1,0 +1,19 @@
+docker service create --network petnet --name db consul sleep 50000
+consul agent -data-dir=/tmp/consul -server -bootstrap -advertise $(hostname -i) -client $(hostname -i)
+
+docker service create --network petnet -p 5000 --name web -e 'DB=db' --no-healthcheck chrch/web sleep 300000
+
+docker service create --replicas 3 --network petnet --name db consul sh -c "consul agent -data-dir=/tmp/consul -server -bootstrap-expect=3 -advertise $(hostname -i)"
+
+
+ifconfig eth0 | awk '/inet addr/{split($2,a,":"); print a[2]}'
+
+docker service create --replicas 3 --network petnet --name db consul sh -c "consul agent -data-dir=/tmp/consul -server -bootstrap-expect=3 -advertise $(hostname -i)"
+
+
+docker run -it alpine sh -c "echo $(hostname -i)”
+
+is different than
+
+$docker run -it alpine sh
+$echo $(hostname -i)

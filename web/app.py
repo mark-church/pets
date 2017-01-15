@@ -1,6 +1,4 @@
 from flask import Flask, render_template, request
-from redis import Redis
-from redis.exceptions import ConnectionError
 import random, socket, time, json, os, sys, ast, consul
 
 db = os.getenv('DB')
@@ -26,15 +24,15 @@ if db:
         port = 8500
         db = address + ':' + str(port)
 
-
+    time.sleep(30)
     c = consul.Consul(host=address, port=port)
-    c.kv.put('hits', '0')
+    if c.kv.get('hits')[1] == None:
+        c.kv.put('hits', '0')
 
 if (os.path.isfile('/run/secrets/consul-ca.cert') & os.path.isfile('/run/secrets/consul.cert') & os.path.isfile('/run/secrets/consul.key')):
     secured = True
 
 if role == 'cat':
-    URL = '/cats'
     title = "Cats"
     images = [
         "http://ak-hdl.buzzfed.com/static/2013-10/enhanced/webdr05/15/9/anigif_enhanced-buzz-26388-1381844103-11.gif",
@@ -51,7 +49,6 @@ if role == 'cat':
         "http://ak-hdl.buzzfed.com/static/2013-10/enhanced/webdr03/15/10/anigif_enhanced-buzz-11980-1381846269-1.gif"
         ]
 elif role == 'dog':
-        URL = '/dogs'
         title = "Dogs"
         images = [
         "https://img.buzzfeed.com/buzzfeed-static/static/2013-12/enhanced/webdr06/3/12/anigif_enhanced-buzz-12996-1386090648-41.gif",
@@ -63,7 +60,7 @@ else:
     sys.stdout.write("Error: no valid role")
     sys.exit(1)
 
-@app.route(URL)
+@app.route('/')
 def index():
     if healthy:
         url = random.choice(images)
@@ -98,7 +95,7 @@ def health():
     else:
         return 'ERROR REQUEST MTHD', 500
 
-#curl -X PUT -H 'Content-Type: application/json' -d '{"healthy": "False"}' http://localhost:8000/health
+#curl -X PUT -H 'Content-Type: application/json' -d '{"healthy": "False"}' http://localhost:5000/health
 #curl -X PUT -H 'Content-Type: application/json' -d '{"healthy": "True"}' http://localhost:8000/health
 #curl -v http://localhost:8000/health
 

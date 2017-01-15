@@ -1,13 +1,11 @@
-#Pets
+#How to Demo Docker Datacenter (DDC) with Pets
 Pets is a simple application that's useful for testing out features of Docker.
 
-Pets is comprised of three container types:
+Pets is comprised of two container types
 
-- `web` is a front-end Python Flask container that serves up random images of housepets depending on what mode it is in
-- `db` is a back-end redis database that stores the number of visits that each `web` service recieves
-- `admin` is an administrative container that shows all the visits that each service has gotten
+- `web` is a front-end Python Flask container that serves up random images of housepets, depending on the given configuration
+- `db` is a back-end consul KV store that stores the number of visits that each `web` service recieves
 
-Pets can be deployed as a single-tenant app or multi-tenant app. In the multi-tenant version Pets creates multiple networks that isolate the different tenants from each other.
 
 ###Running Pets
 ####web
