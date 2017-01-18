@@ -25,10 +25,12 @@ Creating service pets_web
 ####web
 The `web` container has several configuration parameters as environment variables:
 
-| Bridge | Options  | Purpose|
-|:------:|------|----|
-| **`ROLE`** | `dog | cat` | Toggles the animal deliverd by the app. Defaults to `dog`|
-| **`DB`** |   `conatiner | service name` or  `<ip>:<port>`    | Tells `web` where to find `db`|
+- **`ROLE`**: (optional) Toggles the animal deliverd by the app.
+ - `dog` (default)
+ - `cat`
+- **`DB`** (required) Tells `web` where to find `db`. 
+ - Service name or `<ip>:<port>`
+
 
 
 ###Running Pets on Swarm & UCP in Production
