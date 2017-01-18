@@ -1,7 +1,7 @@
 
 FROM alpine:3.4
 
-RUN apk update && apk add py-pip libpq python-dev curl
+RUN apk --no-cache add py-pip libpq python-dev curl
 
 RUN pip install flask==0.10.1 python-consul
 
