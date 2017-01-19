@@ -3,7 +3,7 @@ consul agent -data-dir=/tmp/consul -server -bootstrap -advertise $(hostname -i) 
 
 docker service create --network petnet -p 5000 --name web -e 'DB=db' --no-healthcheck chrch/web sleep 300000
 
-docker service create --replicas 3 --network petnet --name db consul sh -c "consul agent -data-dir=/tmp/consul -server -bootstrap-expect=3 -advertise $(hostname -i)"
+docker service create --replicas 3 --network petnet --name db consul sh -c "consul agent -data-dir=/tmp/consul -server -bootstrap-expect=3 -advertise $\(hostname -i\)"
 
 
 ifconfig eth0 | awk '/inet addr/{split($2,a,":"); print a[2]}'
@@ -17,3 +17,33 @@ is different than
 
 $docker run -it alpine sh
 $echo $(hostname -i)
+
+
+docker service create --network petnet --secret consul-encrypt.json --name db chrch/consul /start.sh
+
+docker run -it --net br --name db --rm chrch/consul
+
+docker service create --network petnet --name db chrch/consul
+
+Start consul with 3 replicas / secret for gossip
+-----
+docker service create --replicas 3 --network petnet --secret consul-encrypt.json --name db chrch/consul /start.sh
+
+
+docker secret create encrypt.json encrypt.json
+
+docker service create -t --replicas 3 --network petnet --secret encrypt.json --name db chrch/consul sh
+
+
+ALEX
+_______________
+docker service create -e CONSUL_BIND_INTERFACE='eth0' --name consul-cluster --network consul --replicas 3 -p 8500:8500 consul agent -server -ui -client=0.0.0.0 -bootstrap-expect=3 -retry-join=consul-cluster -retry-join=consul-cluster -retry-join=consul-cluster -log-level 'debug'
+
+
+docker service create --network=consul --name=consul -e 'CONSUL_LOCAL_CONFIG={"skip_leave_on_interrupt": true}' -e CONSUL_BIND_INTERFACE='eth0' --replicas 3 -p 8500:8500 consul agent -server -ui -client=0.0.0.0 -bootstrap-expect 3 \
+  -retry-join consul \
+  -retry-join consul \
+  -retry-join consul \
+  -retry-interval 5s \
+  -log-level 'debug'
+

@@ -24,7 +24,7 @@ if db:
         port = 8500
         db = address + ':' + str(port)
 
-    time.sleep(30)
+    time.sleep(10)
     c = consul.Consul(host=address, port=port)
     if c.kv.get('hits')[1] == None:
         c.kv.put('hits', '0')

@@ -22,21 +22,20 @@ Creating service pets_web
 ![](images/pets-dev-arch.png) 
 
 
-####web
+####**`web`** configuration parameters
 The `web` container has several configuration parameters as environment variables:
 
 - **`ROLE`**: (optional) Toggles the animal deliverd by the app.
- - `dog` (default)
- - `cat`
-- **`DB`** (required) Tells `web` where to find `db`. 
- - Service name or `<ip>:<port>`
+ - `dog` (default) or `cat`
+- **`DB`** (required) Tells `web` where to find `db`. Service name or `<ip>:<port>`.
+
 
 
 
 ###Running Pets on Swarm & UCP in Production
 Production apps have entirely different requirements when it comes to security, deployment, and also security. Fortunately, deployment on Swarm & UCP is very much the same from development to production. Some minor additions to our compose file add in capabilities for secrets and also for L7 load balancing.
 
-This is the full architecture that is deployed when using [pets-dev-compose.yml](https://github.com/mark-church/pets/blob/master/pets-prod-compose.yml).
+This is the full architecture that is deployed when using [pets-prod-compose.yml](https://github.com/mark-church/pets/blob/master/pets-prod-compose.yml).
 
 ```
 $ docker stack deploy -c pets-prod-compose.yml pets

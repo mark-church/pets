@@ -1,0 +1,16 @@
+
+
+docker service create --replicas 3 --network petnet -e 'DB=db' --name web --container-label SERVICE_NAME="t1" --publish mode=host,target=5000,protocol=tcp chrch/web:1.0
+
+
+
+docker run -d \
+    --name=registrator \
+    --net=host \
+    --volume=/var/run/docker.sock:/tmp/docker.sock \
+    gliderlabs/registrator:latest \
+      consul://localhost:8500
+
+docker run -d --name=consul --net=host -P gliderlabs/consul-server -bootstrap -advertise $(hostname -i) -ui 
+
+docker run -it --name=consul --net=host -P gliderlabs/consul-server -advertise $(hostname -i) -join 172.31.20.185
