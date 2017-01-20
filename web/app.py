@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 import random, socket, time, json, os, sys, ast, consul
 
 db = os.getenv('DB')
@@ -75,7 +75,10 @@ def index():
     if not db:
         hit_string = ""
 
-    return render_template('index.html', url=url, hostname=container_hostname, hit_string=hit_string, title=title, version=version)
+    response = make_response(render_template('index.html', url=url, hostname=container_hostname, hit_string=hit_string, title=title, version=version))
+    response.set_cookie('animals', value='giraffe')
+    return response
+
 
 @app.route('/health', methods=['GET', 'PUT'])
 def health():
