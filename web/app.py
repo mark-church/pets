@@ -3,6 +3,10 @@ import random, socket, time, json, os, sys, ast, consul
 
 db = os.getenv('DB')
 role = os.getenv('ROLE')
+debug = os.getenv('DEBUG')
+
+if debug is None:
+    debug = False
 
 if role is None:
     role = 'dog'
@@ -76,7 +80,7 @@ def index():
         hit_string = ""
 
     response = make_response(render_template('index.html', url=url, hostname=container_hostname, hit_string=hit_string, title=title, version=version))
-    response.set_cookie('animals', value='giraffe')
+    response.set_cookie('user', value='mark')
     return response
 
 
@@ -103,4 +107,4 @@ def health():
 #curl -v http://localhost:8000/health
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=5000, debug=debug)

@@ -2,13 +2,15 @@ version: '3'
 services:
     web:
         image: chrch/web:2.0
+        command: python app.py
         deploy:
             mode: replicated
             replicas: 2
         ports:
-            - 5000:5000
+            - 6000:6000
         environment:
             DB: 'db'
+            DEBUG: 'True'
         networks:
             - backend
         volumes:
