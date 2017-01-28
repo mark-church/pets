@@ -27,7 +27,10 @@ The `web` container has several configuration parameters as environment variable
 
 - **`ROLE`**: (optional) Toggles the animal deliverd by the app.
  - `dog` (default) or `cat`
-- **`DB`** (required) Tells `web` where to find `db`. Service name or `<ip>:<port>`.
+- **`DB`**: Tells `web` where to find `db`. Service name or `<ip>:<port>`.
+- **`DEBUG`**: Puts `web` containers in to debug mode. When mounting a volume for code, they will restart automatically when they detect a change in the code. Defaults to off, set to `True` to turn on.
+- **`ADMIN_PASS_FILE`**: If set, will password protect the Admin Console of `web`. Set to the full location of the Swarm secret (`/run/secrets/< X >`)
+
 
 
 

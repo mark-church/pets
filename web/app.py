@@ -2,14 +2,16 @@ from flask import Flask, render_template, request, make_response
 import random, socket, time, json, os, sys, ast, consul
 
 db = os.getenv('DB')
-role = os.getenv('ROLE')
-debug = os.getenv('DEBUG')
+role = os.getenv('ROLE', 'dog')
+debug = os.getenv('DEBUG', False)
+admin_password_file = os.getenv('ADMIN_PASSWORD_FILE')
 
-if debug is None:
-    debug = False
+if admin_password_file is None:
+    password = 'docker123'
+else:
+    f = open(admin_password_file, 'r')
+    password = f.read()
 
-if role is None:
-    role = 'dog'
 
 healthy = True
 version ='2.0'
@@ -79,7 +81,7 @@ def index():
     if not db:
         hit_string = ""
 
-    response = make_response(render_template('index.html', url=url, hostname=container_hostname, hit_string=hit_string, title=title, version=version))
+    response = make_response(render_template('animal.html', url=url, hostname=container_hostname, hit_string=hit_string, title=title, version=version))
     response.set_cookie('user', value='mark')
     return response
 

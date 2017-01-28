@@ -13,4 +13,4 @@ HEALTHCHECK CMD curl --fail http://localhost:5000/health || exit 1
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+CMD python app.py & python admin.py

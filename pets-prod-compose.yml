@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 services:
     web:
         image: chrch/web:2.0
@@ -6,14 +6,24 @@ services:
             mode: replicated
             replicas: 2
             labels:
-                com.docker.ucp.mesh.http.5000: "external_route=http://pets.dckr.org,internal_port=5000,sticky_sessions=user"
+                com.docker.ucp.mesh.http.5000: "external_route=http://pets.dckr.org,internal_port=5000"
+                com.docker.ucp.mesh.http.7000: "external_route=http://admin.pets.dckr.org,internal_port=7000"
         ports:
             - 5000
+            - 7000
+            - 8000
         environment:
             DB: 'db'
+            ADMIN_PASSWORD_FILE: '/run/secrets/admin_password_v1'
         networks:
             - backend
             - ucp-hrm
+        secrets:
+            - source: admin_password_v1
+              target: admin_password_v1
+              uid: "0"
+              gid: "0"
+              mode: 0400
     
     db:
         image: consul:0.7.2
@@ -30,5 +40,14 @@ services:
             
 networks:
     backend:
+        driver_opts:
+            encrypted: "true"
     ucp-hrm:
         external: true
+
+secrets:
+    admin_password_v1:
+        external: true
+
+
+
