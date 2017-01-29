@@ -47,3 +47,29 @@ width:350px;
 b {
   color: #00cbca;
 } 
+
+h3 {
+    color: #253237;
+}
+
+input[type="text"]  {
+    background-color: transparent;
+    color: #253237;
+    outline: none;
+    outline-style: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: solid #253237 2px;
+    padding: 3px 10px;
+    width: 250px;
+    font-size: 14px;
+    text-align: center;
+}
+
+input:focus::-webkit-input-placeholder { color:transparent; }
+input:focus:-moz-placeholder { color:transparent; } /* Firefox 18- */
+input:focus::-moz-placeholder { color:transparent; } /* Firefox 19+ */
+input:focus:-ms-input-placeholder { color:transparent; } /* oldIE ;) */
+
+

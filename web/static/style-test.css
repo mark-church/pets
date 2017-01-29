@@ -35,8 +35,25 @@ button.b{
   background-color: #00cbca;
 }
 
+
+
+.text-lne {
+    background-color: transparent;
+    color: #253237;
+    outline: none;
+    outline-style: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: solid #253237 1px;
+    padding: 3px 10px;
+
+}
+
+
+
 #tip{
-  text-align: left;
+  text-align: center;
   color: #c0c9ce;
   font-size: 14px;
 }
@@ -62,6 +79,11 @@ button.b{
 #content-container-center{
   display: table-cell;
   text-align: center;
+}
+
+#content-container-right{
+  display: table-cell;
+  text-align: right;
 }
 
 #content-container-center h3{

@@ -3,6 +3,8 @@ import random, socket, time, json, os, sys, ast, consul
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
+option_c = os.getenv('OPTION_C', "Whales")
+option_d = os.getenv('OPTION_D', "Penguins")
 hostname = socket.gethostname()
 debug = True
 
@@ -11,7 +13,10 @@ app = Flask(__name__)
 @app.route("/", methods=['POST','GET'])
 def index():
 
-    vote = None
+    #vote_cookie = request.cookies.get('vote')
+
+    #if vote_cookie:
+
 
     if request.method == 'POST':
         vote = request.form['vote']

@@ -2,27 +2,39 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{{option_a}} vs {{option_b}}!</title>
+    <title>Docker PaaS</title>
+    <div class="title">
+      <p1><img src="../static/dckr.png" width="100px">   
+      <br>
+      <h3>Pets as a Service</h3>
+    </div>
+
     <base href="/index.html">
     <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
     <meta name="keywords" content="docker-compose, docker, stack">
     <meta name="author" content="Tutum dev team">
-    <link rel='stylesheet' href="{{ url_for('static',filename='style-test.css') }}" />
+    <link rel='stylesheet' type='text/css' href="../static/style.css">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <link rel='stylesheet' href="{{ url_for('static',filename='style-test.css') }}" />
   </head>
   <body>
+
+
+
     <div id="content-container">
       <div id="content-container-center">
-        <h3>{{option_a}} vs {{option_b}}!</h3>
-        <form id="choice" name='form' method="POST" action="/">
+        <form id="choice" name='form' method="POST" action="/vote">
           <button id="a" type="submit" name="vote" class="a" value="a">{{option_a}}</button>
           <button id="b" type="submit" name="vote" class="b" value="b">{{option_b}}</button>
+          <button id="a" type="submit" name="vote" class="a" value="c">{{option_c}}</button>
+          <input type="text" name="name" class="text-line" placeholder="Enter your name and cast your vote">
         </form>
-        <div id="tip">
-          (Tip: you can change your vote)
-        </div>
-        <div id="hostname">
-          Processed by container ID {{hostname}}
+        <div class="tip">
+          <br>
+          <br>
+          <br>
+          Processed by container ID <b>{{hostname}}</b>
         </div>
       </div>
     </div>
@@ -41,6 +53,11 @@
         $(".b").prop('disabled', true);
         $(".b").html('{{option_b}} <i class="fa fa-check-circle"></i>');
         $(".a").css('opacity','0.4');
+      }
+      if(vote == "c"){
+        $(".a").prop('disabled', true);
+        $(".a").html('{{option_c}} <i class="fa fa-check-circle"></i>');
+        $(".b").css('opacity','0.4');
       }
     </script>
     {% endif %}
