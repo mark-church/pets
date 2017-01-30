@@ -7,13 +7,18 @@ services:
             replicas: 2
             labels:
                 com.docker.ucp.mesh.http.5000: "external_route=http://pets.dckr.org,internal_port=5000"
-                com.docker.ucp.mesh.http.7000: "external_route=http://admin.pets.dckr.org,internal_port=7000"
+                com.docker.ucp.mesh.http.7000: "external_route=http://admin.pets.dckr.org,internal_port=7000,sticky_sessions=paas_admin_id"
         ports:
             - 5000
             - 7000
-            - 8000
+        healthcheck:
+            interval: 10s
+            timeout: 2s
+            retries: 3
+
         environment:
             DB: 'db'
+            DEBUG: 'True'
             ADMIN_PASSWORD_FILE: '/run/secrets/admin_password_v1'
         networks:
             - backend
@@ -40,8 +45,6 @@ services:
             
 networks:
     backend:
-        driver_opts:
-            encrypted: "true"
     ucp-hrm:
         external: true
 

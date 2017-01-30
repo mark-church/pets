@@ -4,9 +4,8 @@
     <meta charset="utf-8">
     <title>Docker PaaS</title>
     <div class="title">
-      <p1><img src="../static/dckr.png" width="100px">   
-      <br>
-      <h3>Pets as a Service</h3>
+      <p style="text-align:left; margin-left:50px;"><img src="../static/docker_logo.png" width="100px"></p>
+      <h2>Docker Pets as a Service</h2>
     </div>
 
     <base href="/index.html">
@@ -21,14 +20,19 @@
   <body>
 
 
-
+  <br>
     <div id="content-container">
       <div id="content-container-center">
         <form id="choice" name='form' method="POST" action="/vote">
+         <input type="text" name="name" class="text-line" placeholder="Enter your name" required>
+
+         <br>
+         <br>
+          
           <button id="a" type="submit" name="vote" class="a" value="a">{{option_a}}</button>
           <button id="b" type="submit" name="vote" class="b" value="b">{{option_b}}</button>
           <button id="a" type="submit" name="vote" class="a" value="c">{{option_c}}</button>
-          <input type="text" name="name" class="text-line" placeholder="Enter your name and cast your vote">
+
         </form>
         <div class="tip">
           <br>

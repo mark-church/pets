@@ -13,6 +13,10 @@ div.title {
   margin-top: 20px; 
 }
 
+div.title p {
+  text-align: left; 
+}
+
 
 div.wrapper {
   width: 800px;
@@ -48,8 +52,18 @@ b {
   color: #00cbca;
 } 
 
-h3 {
-    color: #253237;
+h2 {
+    color: #1aaaf8;
+}
+
+h4 {
+  font-size: 20px;
+  color: #253237;
+}
+
+#directions {
+  font-size: 20px;
+  color: #253237;
 }
 
 input[type="text"]  {
@@ -63,7 +77,7 @@ input[type="text"]  {
     border-bottom: solid #253237 2px;
     padding: 3px 10px;
     width: 250px;
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
 }
 

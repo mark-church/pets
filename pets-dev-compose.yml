@@ -6,11 +6,10 @@ services:
         tty: true
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 1
         ports:
             - 5000:5000
             - 7000:7000
-            - 8000:8000
         environment:
             DB: 'db'
             DEBUG: 'True'

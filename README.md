@@ -1,9 +1,9 @@
-#The Pets Application
-Pets is a simple application that's useful for testing out features of Docker.
+#Docker Pets as a Service
+PaaS is a simple application that's useful for testing out features of Docker Datacenter.
 
-Pets is comprised of two images:
+PaaS is comprised of two images:
 
-- `chrch/web` is a front-end Python Flask container that serves up random images of housepets, depending on the given configuration
+- `chrch/paas` is a front-end Python Flask container that serves up random images of housepets, depending on the given configuration
 - `consul` is a back-end KV store that stores the number of visits that the `web` services recieve. It's configured to bootstrap itself with 3 replicas so that we have fault tolerant persistence.
 
 
@@ -25,11 +25,10 @@ Creating service pets_web
 ####**`web`** configuration parameters
 The `web` container has several configuration parameters as environment variables:
 
-- **`ROLE`**: (optional) Toggles the animal deliverd by the app.
- - `dog` (default) or `cat`
+
 - **`DB`**: Tells `web` where to find `db`. Service name or `<ip>:<port>`.
 - **`DEBUG`**: Puts `web` containers in to debug mode. When mounting a volume for code, they will restart automatically when they detect a change in the code. Defaults to off, set to `True` to turn on.
-- **`ADMIN_PASS_FILE`**: If set, will password protect the Admin Console of `web`. Set to the full location of the Swarm secret (`/run/secrets/< X >`)
+- **`ADMIN_PASS_FILE`**: Turns secrets on. If set, will password protect the Admin Console of `web`. Set to the full location of the Swarm secret (`/run/secrets/< X >`)
 
 
 

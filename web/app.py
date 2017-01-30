@@ -1,14 +1,13 @@
 from flask import Flask, render_template, request, make_response, redirect
 import random, socket, time, json, os, sys, ast, consul
 
-db = os.getenv('DB')
-vote = os.getenv('ROLE', 'Dogs')
-debug = os.getenv('DEBUG', False)
-
-
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
 option_c = os.getenv('OPTION_C', "Whales")
+vote = option_a
+
+db = os.getenv('DB')
+debug = os.getenv('DEBUG', False)
 
 option_a_images = os.listdir('./static/option_a')
 option_b_images = os.listdir('./static/option_b')
@@ -33,13 +32,16 @@ if db:
         db = address + ':' + str(port)
 
     time.sleep(10)
+    
+    #Connect to Consul
     c = consul.Consul(host=address, port=port)
+
+    #Test to see Consul values need to be zeroed
     if c.kv.get('hits')[1] == None:
         c.kv.put('hits', '0')
-
-if (os.path.isfile('/run/secrets/consul-ca.cert') & os.path.isfile('/run/secrets/consul.cert') & os.path.isfile('/run/secrets/consul.key')):
-    secured = True
-
+        c.kv.put(option_a, '0')
+        c.kv.put(option_b, '0')
+        c.kv.put(option_c, '0')
 
 
 @app.route('/')
@@ -47,10 +49,14 @@ def index():
     
     vote_cookie = request.cookies.get('vote')
 
-    if not vote_cookie:
+    
+    if db is None:
+        vote = option_b
+    elif vote_cookie is None:
         return redirect('/vote')
-
-    vote = vote_cookie
+    else:
+        vote = vote_cookie
+        
 
     #Health check test that toggles image
     if healthy == True:
@@ -78,6 +84,8 @@ def vote():
         vote = request.form['vote']
         name = request.form['name']
 
+        x, hits = c.kv.get('hits')
+
         if vote == 'a':
             vote = option_a
         elif vote == 'b':
@@ -87,8 +95,12 @@ def vote():
         else:
             print 'error'
 
-        #Record vote in consul
+        #Record name & vote
         c.kv.put(name, vote)
+
+        #Record vote total
+        votes_total = int(c.kv.get(vote)[1]["Value"]) + 1
+        c.kv.put(vote, str(votes_total))
 
         response = make_response(redirect('/'))
         response.set_cookie('vote', value=vote)
@@ -146,4 +158,4 @@ def get_image(vote):
 #curl -v http://localhost:8000/health
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=debug, threaded=True)
+    app.run(host="0.0.0.0", port=5000, debug=debug)
