@@ -36,7 +36,7 @@ if db:
     #Connect to Consul
     c = consul.Consul(host=address, port=port)
 else:
-    print "Error, no DB given"
+    print "No DB given"
 
 
 
@@ -44,7 +44,7 @@ else:
 def index():
     admin_id = request.cookies.get('paas_admin_id')
 
-    if (admin_id in admin_id_list) or (admin_password_file is None):
+    if admin_password_file is None:
         return redirect('/admin')
 
     error = None
@@ -66,8 +66,8 @@ def index():
 def console():
     admin_id = request.cookies.get('paas_admin_id')
 
-    if (admin_id not in admin_id_list) and (admin_password_file):
-        return redirect('/')
+    #if (admin_id not in admin_id_list) and (admin_password_file):
+     #   return redirect('/')
 
     if request.method == 'POST':
         pass

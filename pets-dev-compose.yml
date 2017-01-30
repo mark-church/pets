@@ -1,12 +1,16 @@
 version: '3'
 services:
     web:
-        image: chrch/web:2.0
+        image: chrch/paas:1.0
         command: sh -c 'python app.py & python admin.py & python test.py'
         tty: true
         deploy:
             mode: replicated
             replicas: 1
+        healthcheck:
+            interval: 10s
+            timeout: 2s
+            retries: 3
         ports:
             - 5000:5000
             - 7000:7000

@@ -15,7 +15,7 @@ option_c_images = os.listdir('./static/option_c')
 
 
 healthy = True
-version ='2.0'
+version ='1.0'
 hostname = socket.gethostname()
 
 sys.stdout.write("Starting web container")
@@ -72,7 +72,7 @@ def index():
     if not db:
         hit_string = ""
 
-    return render_template('pets.html', url=get_image(vote), hostname=hostname, hit_string=hit_string, title=vote, version=version)
+    return render_template('pets.html', url=url, hostname=hostname, hit_string=hit_string, title=vote, version=version)
 
 @app.route("/vote", methods=['POST','GET'])
 def vote():

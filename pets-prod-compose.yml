@@ -1,7 +1,7 @@
 version: '3.1'
 services:
     web:
-        image: chrch/web:2.0
+        image: chrch/paas:1.0
         deploy:
             mode: replicated
             replicas: 2
